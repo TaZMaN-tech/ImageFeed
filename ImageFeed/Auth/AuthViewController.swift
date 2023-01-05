@@ -15,7 +15,7 @@ final class AuthViewController: UIViewController {
     
     private let ShowWebViewSegueIdentifier = "ShowWebView"
     private let authService = OAuth2Service()
-    private let auth2TokenSorage = OAuth2TokenStorage()
+    private let auth2TokenStorage = OAuth2TokenStorage()
     
     weak var delegate: AuthViewControllerDelegate?
     
@@ -36,11 +36,15 @@ extension AuthViewController: WebViewViewControllerDelegate {
         authService.fetchOAuthToken(code) { result in
             switch result {
             case .success(let token):
-                print(token)
-                self.auth2TokenSorage.token = token
-                self.delegate?.authViewController(self, didAuthenticateWithCode: code)
+                DispatchQueue.main.async {
+                    print(token)
+                    self.auth2TokenStorage.token = token
+                    self.delegate?.authViewController(self, didAuthenticateWithCode: code)
+                }
             case .failure(let error):
-                print(error)
+                DispatchQueue.main.async {
+                    print(error)
+                }
             }
             
         }

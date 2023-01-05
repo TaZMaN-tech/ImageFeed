@@ -35,7 +35,7 @@ final class OAuth2Service {
 
             // Проверяем, что пришёл успешный код ответа
             if let response = response as? HTTPURLResponse,
-                response.statusCode < 200 && response.statusCode >= 300 {
+                response.statusCode < 200 || response.statusCode >= 300 {
                 completion(.failure(NetworkError.codeError))
                 return
             }
